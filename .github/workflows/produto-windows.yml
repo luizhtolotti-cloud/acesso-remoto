@@ -182,6 +182,9 @@ jobs:
           $v = (& ".\dist\rustdesk.exe" --version | Out-String).Trim()
           Write-Output "Versão reportada: '$v'"
           if (-not $v) { throw "executável não respondeu a --version" }
+          $info = (Get-Item ".\dist\rustdesk.exe").VersionInfo
+          Write-Output "ProductName='$($info.ProductName)' CompanyName='$($info.CompanyName)'"
+          if ($info.ProductName -ne "DCL Remoto") { throw "metadados do executável sem a marca DCL Remoto" }
 
       - name: Executável portátil (autoextraível)
         shell: bash
@@ -192,7 +195,7 @@ jobs:
           python3 ./generate.py -f ../../dist/ -o . -e ../../dist/rustdesk.exe
           popd
           mkdir -p ./out
-          mv ./target/release/rustdesk-portable-packer.exe ./out/portable-x64.exe
+          mv ./target/release/rustdesk-portable-packer.exe ./out/DCL-Remoto-portatil-x64.exe
           cd out && sha256sum *.exe | tee SHA256SUMS.txt
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

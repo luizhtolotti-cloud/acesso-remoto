@@ -1,0 +1,15 @@
+{
+  "app-name": "DCL-Remoto",
+  "override-settings": {
+    "allow-hide-cm": "N",
+    "allow-auto-update": "N",
+    "enable-check-update": "N",
+    "allow-remote-config-modification": "N",
+    "hide-help-cards": "Y"
+  },
+  "default-settings": {
+    "approve-mode": "password-click",
+    "verification-method": "use-both-passwords",
+    "enable-lan-discovery": "N"
+  }
+}

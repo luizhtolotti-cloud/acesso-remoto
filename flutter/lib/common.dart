@@ -249,16 +249,16 @@ class MyTheme {
   MyTheme._();
 
   static const Color grayBg = Color(0xFFEFEFF2);
-  static const Color accent = Color(0xFF0071FF);
-  static const Color accent50 = Color(0x770071FF);
-  static const Color accent80 = Color(0xAA0071FF);
+  static const Color accent = Color(0xFF0E5CA8); // DCL Remoto
+  static const Color accent50 = Color(0x770E5CA8);
+  static const Color accent80 = Color(0xAA0E5CA8);
   static const Color canvasColor = Color(0xFF212121);
   static const Color border = Color(0xFFCCCCCC);
-  static const Color idColor = Color(0xFF00B6F0);
+  static const Color idColor = Color(0xFF0E5CA8);
   static const Color darkGray = Color.fromARGB(255, 148, 148, 148);
   static const Color cmIdColor = Color(0xFF21790B);
   static const Color dark = Colors.black87;
-  static const Color button = Color(0xFF2C8CFF);
+  static const Color button = Color(0xFF1A73C9);
   static const Color hoverBorder = Color(0xFF999999);
 
   // ListTile
@@ -3060,8 +3060,12 @@ int versionCmp(String v1, String v2) {
   return bind.versionToNumber(v: v1) - bind.versionToNumber(v: v2);
 }
 
+// DCL Remoto: nome exibido nas janelas; igual a produto::NOME_EXIBICAO no Rust
+// (o runner do Windows localiza a janela principal por este título).
+const kNomeExibicao = 'DCL Remoto';
+
 String getWindowName({WindowType? overrideType}) {
-  final name = bind.mainGetAppNameSync();
+  final name = kNomeExibicao;
   switch (overrideType ?? kWindowType) {
     case WindowType.Main:
       return name;

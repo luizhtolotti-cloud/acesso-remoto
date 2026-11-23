@@ -1177,6 +1177,10 @@ fn process_software_update_check_response(bytes: Bytes) -> ResultType<()> {
 // Because the url is always `https://api.rustdesk.com/version/latest`.
 #[tokio::main(flavor = "current_thread")]
 pub async fn do_check_software_update() -> hbb_common::ResultType<()> {
+    // DCL Remoto: sem consulta de versão em api.rustdesk.com.
+    if !is_rustdesk() {
+        return Ok(());
+    }
     let (request, url) =
         hbb_common::version_check_request(hbb_common::VER_TYPE_RUSTDESK_CLIENT.to_string());
     let proxy_conf = Config::get_socks();
@@ -2507,6 +2511,14 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
 }
 
 pub fn load_custom_client() {
+    // DCL Remoto: configuração embutida no binário; custom.txt externo é ignorado.
+    crate::produto::aplicar();
+}
+
+/// Carregamento original do upstream (custom.txt assinado pela RustDesk), mantido para
+/// facilitar merges futuros. Não é chamado no produto.
+#[allow(dead_code)]
+fn load_custom_client_upstream() {
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());
@@ -2618,6 +2630,11 @@ pub fn read_custom_client(config: &str) {
         log::error!("Failed to dec custom client config");
         return;
     };
+    apply_custom_client_data(&data);
+}
+
+/// Aplica o JSON (já verificado ou embutido no binário) de um cliente personalizado.
+pub(crate) fn apply_custom_client_data(data: &[u8]) {
     let Ok(mut data) =
         serde_json::from_slice::<std::collections::HashMap<String, serde_json::Value>>(&data)
     else {

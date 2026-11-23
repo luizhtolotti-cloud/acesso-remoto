@@ -1,6 +1,10 @@
 {
   "app-name": "DCL-Remoto",
   "override-settings": {
+    "custom-rendezvous-server": "remoto.dclassistencia.com.br",
+    "relay-server": "remoto.dclassistencia.com.br",
+    "key": "4K26EpKjUMWle4dLO7XilVKe2Gs7x93gLF80nwMV1NY=",
+    "hide-server-settings": "Y",
     "allow-hide-cm": "N",
     "allow-auto-update": "N",
     "enable-check-update": "N",

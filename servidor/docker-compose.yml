@@ -1,0 +1,34 @@
+# DCL Remoto — servidor (rustdesk-server OSS 1.1.16, AGPL-3.0)
+# hbbs = ID/rendezvous, hbbr = relay. Rede "host": o hbbs precisa ver o IP real dos
+# clientes para detectar NAT e tentar a conexão direta (P2P) antes do relay.
+#
+# Imagem fixada por digest: atualização só acontece quando este arquivo for alterado.
+# Para adicionar relays: suba outro hbbr em outra máquina com a mesma chave e acrescente
+# o endereço em -r, separado por vírgula (ex.: -r remoto.dclassistencia.com.br,relay2.dclassistencia.com.br).
+
+services:
+  hbbs:
+    container_name: dcl-hbbs
+    image: rustdesk/rustdesk-server:1.1.16@sha256:8ecdab65deb7c84652a626380e31d11a8f1fbafd97916d57f95c20628f943c00
+    command: hbbs -r remoto.dclassistencia.com.br:21117 -k _
+    network_mode: host
+    volumes:
+      - ./data:/root
+    depends_on:
+      - hbbr
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "20m", max-file: "5" }
+
+  hbbr:
+    container_name: dcl-hbbr
+    image: rustdesk/rustdesk-server:1.1.16@sha256:8ecdab65deb7c84652a626380e31d11a8f1fbafd97916d57f95c20628f943c00
+    command: hbbr -k _
+    network_mode: host
+    volumes:
+      - ./data:/root
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "20m", max-file: "5" }

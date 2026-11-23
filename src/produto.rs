@@ -6,8 +6,8 @@
 //! código do upstream, sem verificação de assinatura: o arquivo vem do nosso próprio fonte,
 //! não de entrada externa.
 //!
-//! Servidor e chave próprios entram em `override-settings` (custom-rendezvous-server,
-//! relay-server, key) na Fase 5.
+//! Servidor e chave próprios ficam em `override-settings` (custom-rendezvous-server,
+//! relay-server, key): o usuário final não consegue trocá-los. Ver servidor/README.md.
 
 /// Nome exibido ao usuário. O nome interno (`app-name`) usa hífen porque também nomeia o
 /// serviço do Windows, a pasta de configuração e o esquema de URI, que não aceitam espaço.
@@ -28,5 +28,9 @@ mod tests {
         assert!(!nome.is_empty());
         assert!(nome.chars().all(|c| c.is_ascii_alphanumeric() || c == '-'));
         assert_eq!(v["override-settings"]["allow-hide-cm"], "N");
+        let k = v["override-settings"]["key"].as_str().unwrap();
+        use hbb_common::base64::{engine::general_purpose::STANDARD, Engine as _};
+        assert_eq!(STANDARD.decode(k).unwrap().len(), 32);
+        assert!(!v["override-settings"]["custom-rendezvous-server"].as_str().unwrap().is_empty());
     }
 }

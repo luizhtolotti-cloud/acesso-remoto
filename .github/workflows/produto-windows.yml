@@ -10,6 +10,7 @@ on:
     paths-ignore:
       - "docs/**"
       - "*.md"
+      - "servidor/**"
 
 env:
   RUST_VERSION: "1.75"
